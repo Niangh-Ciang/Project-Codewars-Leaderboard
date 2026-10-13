@@ -146,3 +146,52 @@ section {
 #leaderboard td:last-child {
   text-align: right;
 }
+
+/* Winner Row */
+
+.top-scorer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 215, 0, 0.2),
+    rgba(255, 193, 7, 0.1)
+  );
+  font-weight: bold;
+}
+
+.top-scorer td:first-child {
+  color: #b7791f;
+}
+
+.top-scorer td:nth-child(2)::before {
+  content: "🏆 ";
+}
+/* Accessibility */
+
+#load-btn:focus-visible,
+#username:focus-visible,
+#ranking-type:focus-visible {
+  outline: 3px solid #3d78a8;
+  outline-offset: 3px;
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+  .search-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #load-btn {
+    width: 100%;
+  }
+
+  .ranking-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+  }
+}
