@@ -21,7 +21,7 @@ window.onload = function () {
   elements.message = document.getElementById("message");
 
   elements.loadButton.addEventListener("click", handleLoadLeaderboard);
-  elements.rankingSelect.addEventListener("change", handleRankingChange);
+  elements.rankingSelect.addEventListener("change", handleLanguageChange);
 };
 
 async function handleLoadLeaderboard() {
@@ -72,8 +72,6 @@ async function handleLoadLeaderboard() {
           .map((result) => result.reason.message),
       ),
     ];
-
-    state.loadErrors = [];
 
     if (invalidUsers.length === 1) {
       state.loadErrors.push(`User "${invalidUsers[0]}" was not found.`);
@@ -147,7 +145,7 @@ function renderLanguageOptions() {
   elements.rankingSelect.value = state.selectedLanguage;
 }
 
-function handleRankingChange() {
+function handleLanguageChange() {
   state.selectedLanguage = elements.rankingSelect.value;
   renderTable();
   updateMessage();
@@ -190,7 +188,7 @@ function renderTable() {
 }
 
 function updateMessage() {
-  elements.message.textContent = state.loadErrors.join(" ");
+  elements.message.textContent = state.loadErrors;
 }
 
 function render() {
