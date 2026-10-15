@@ -1,9 +1,4 @@
-// This is a placeholder file to show how you can "mock" fetch requests using
-// the nock library.
-// You can delete the contents of the file once you have understood how it
-// works.
-
-import { getUsersWithLanguage } from "./ranking.mjs";
+import { getUsersWithLanguage, makeFetchRequest } from "./ranking.mjs";
 
 const state = {
   users: [],
@@ -93,9 +88,7 @@ async function fetchUser(username) {
   let response;
 
   try {
-    response = await fetch(
-      `https://www.codewars.com/api/v1/users/${encodeURIComponent(username)}`,
-    );
+    response = await makeFetchRequest(username);
   } catch {
     throw new Error(
       "Could not connect to Codewars while looking up user information. Check your internet connection and try again.",
