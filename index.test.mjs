@@ -1,33 +1,115 @@
-// This is a placeholder file which shows how you use the nock library to
-// "mock" fetch requests, replacing real requests with fake ones that you
-// control in the test. This means you can "force" the fetch request to return
-// data in the format that you want.
-// IMPORTANT: You _must_ run npm install within the Project-Codewars-Leaderboard
-// folder for this to work.
-// You can change or delete the contents of the file once you have understood
-// how it works.
-
 import test from "node:test";
-import assert from "node:assert";
+import assert from "node:assert/strict";
 import nock from "nock";
-import { makeFetchRequest } from "./index.mjs";
+import { makeFetchRequest, getUsersWithLanguage } from "./ranking.mjs";
 
 test("mocks a fetch function", async () => {
-  // Create a fetch request "mock" using the nock library, which "replaces"
-  // real requests with fake ones that we can control in the test using nock
-  // functions.
-  // In this example, we set up nock so that it looks for GET requests to
-  // https://example.com/test (no other URLs will work) and responds with a 200
-  // HTTP status code, and the body {"user": "someone"}.
-  const scope = nock("https://example.com").get("/test").reply(200, JSON.stringify({ user: "someone" }));
+  const scope = nock("https://www.codewars.com")
+    .get("/api/v1/users/someone")
+    .reply(200, { username: "someone" });
 
-  // Check that the response we got back included the fake body we set up.
-  const response = await makeFetchRequest();
+  const response = await makeFetchRequest("someone");
   const parsedResponse = await response.json();
-  assert(parsedResponse.user === "someone");
 
-  // Ensure that a fetch request has been replaced by the nock library. This
-  // helps ensure that you're not making real fetch requests that don't match
-  // the nock configuration.
-  assert(scope.isDone() === true, "No matching fetch request has been made");
+  assert.equal(parsedResponse.username, "someone");
+  assert.equal(scope.isDone(), true, "No matching fetch request has been made");
+});
+
+const users = [
+  {
+    username: "Alice",
+    ranks: {
+      overall: { score: 1800 },
+      languages: {
+        javascript: { score: 900 },
+        python: { score: 650 },
+      },
+    },
+  },
+  {
+    username: "Bob",
+    ranks: {
+      overall: { score: 1200 },
+      languages: {
+        python: { score: 800 },
+        java: { score: 500 },
+      },
+    },
+  },
+  {
+    username: "Charlie",
+    ranks: {
+      overall: { score: 2100 },
+      languages: {
+        javascript: { score: 750 },
+        java: { score: 950 },
+        ruby: { score: 400 },
+      },
+    },
+  },
+  {
+    username: "David",
+    ranks: {
+      overall: { score: 950 },
+      languages: {
+        javascript: { score: 300 },
+        sql: { score: 100 },
+      },
+    },
+  },
+  {
+    username: "Eve",
+    ranks: {
+      overall: { score: 0 },
+      languages: {
+        python: { score: 950 },
+        sql: { score: 250 },
+        go: { score: 600 },
+      },
+    },
+  },
+  {
+    username: "Freddie",
+    ranks: {
+      overall: { score: 700 },
+      languages: {},
+    },
+  },
+];
+
+test("getUsersWithLanguage returns users sorted by overall score", () => {
+  const result = getUsersWithLanguage(users, "overall");
+  const expectedOrder = ["Charlie", "Alice", "Bob", "David", "Freddie", "Eve"];
+  const resultOrder = result.map((user) => user.username);
+  assert.deepEqual(resultOrder, expectedOrder);
+});
+
+test("getUsersWithLanguage returns users sorted by JavaScript score", () => {
+  const result = getUsersWithLanguage(users, "javascript");
+  const expectedOrder = ["Alice", "Charlie", "David"];
+  const resultOrder = result.map((user) => user.username);
+  assert.deepEqual(resultOrder, expectedOrder);
+});
+
+test("getUsersWithLanguage returns users sorted by Python score", () => {
+  const result = getUsersWithLanguage(users, "python");
+  const expectedOrder = ["Eve", "Bob", "Alice"];
+  const resultOrder = result.map((user) => user.username);
+  assert.deepEqual(resultOrder, expectedOrder);
+});
+
+test("does not change the original array", () => {
+  const originalUsers = users.map((user) => user.username);
+  getUsersWithLanguage(users, "javascript");
+  assert.deepEqual(
+    users.map((user) => user.username),
+    originalUsers,
+  );
+});
+
+test("getUsersWithLanguage returns empty language for selected language", () => {
+  const result = getUsersWithLanguage(users, "nonexistentLanguage");
+  const expectedOrder = [];
+  const resultOrder = result.map((user) => user.username);
+  assert.deepEqual(resultOrder, expectedOrder);
 });
