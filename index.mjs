@@ -117,6 +117,10 @@ async function fetchUser(username) {
 function renderLanguageOptions() {
   elements.rankingSelect.replaceChildren();
 
+  if (state.users.length === 0) {
+    return;
+  }
+
   const languages = [];
 
   state.users.forEach((user) => {
