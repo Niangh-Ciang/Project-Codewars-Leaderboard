@@ -181,7 +181,7 @@ function renderTable() {
 }
 
 function updateMessage() {
-  elements.message.textContent = state.loadErrors;
+  elements.message.textContent = state.loadErrors.join(" ");
 }
 
 function render() {

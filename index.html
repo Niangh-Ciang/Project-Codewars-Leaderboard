@@ -1,27 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta
-    name="description"
-    content="Compare Codewars users by their overall and programming language rankings and scores."
-     />
-  <title>Codewars leaderboard</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <main>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Compare Codewars users by their overall and programming language rankings and scores."
+    />
+    <title>Codewars leaderboard</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="index.mjs" type="module"></script>
+  </head>
+  <body>
+    <main>
       <h1>Codewars leaderboard</h1>
 
       <section class="search-section">
         <label for="username">Enter Codewars username:</label>
-        <input type="text" id="username" placeholder="e.g. CodeYourFuture,40thieves,SallyMcGrath" />
+        <input
+          type="text"
+          id="username"
+          placeholder="e.g. CodeYourFuture,40thieves,SallyMcGrath"
+        />
         <button id="load-btn">Load Leaderboard</button>
       </section>
 
       <p id="message" role="status" aria-live="polite"></p>
-
 
       <section class="ranking-section">
         <label for="ranking-type">Ranking Type:</label>
@@ -41,9 +46,7 @@
           </thead>
           <tbody></tbody>
         </table>
+      </section>
     </main>
-  
-</body>
-
-<script src="index.mjs" type="module"></script>
+  </body>
 </html>
